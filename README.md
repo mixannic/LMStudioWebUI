@@ -228,6 +228,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Responsive design improvements
 - Accessibility enhancements
 
----
+---<img width="1882" height="905" alt="2026-02-18_20-34-27" src="https://github.com/user-attachments/assets/fac2a470-2f90-43e5-a60b-22b51d4bc6e7" />
+
+
 
 **Note**: This is a standalone HTML application that requires no build process or server setup. Simply download and open in any modern browser to use with your LM Studio server.
