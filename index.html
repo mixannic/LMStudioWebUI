@@ -134,6 +134,93 @@
       font-size: 1.1rem;
       font-weight: 600;
     }
+    
+    /* Prompts Library Section */
+    #prompts-library-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.5rem 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-top: 1px solid #333;
+      padding-top: 1rem;
+    }
+    
+    /* Theme Selection Section */
+    #theme-selector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.5rem 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-top: 1px solid #333;
+      padding-top: 1rem;
+    }
+    #theme-selector {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+    #theme-selector:hover { background-color: var(--input-background); }
+    #add-prompt-button {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--button-color);
+      color: var(--text-color);
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      transition: background-color var(--transition-speed);
+      font-size: 0.9rem;
+    }
+    #add-prompt-button:hover { background-color: var(--accent-color); }
+    #prompts-list { list-style: none; padding: 0; margin: 0; }
+    #prompts-list li {
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 0.5rem;
+      background-color: var(--background-color);
+      cursor: pointer;
+      transition: background-color var(--transition-speed);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9rem;
+      position: relative;
+      border-left: 3px solid transparent;
+    }
+    #prompts-list li:hover { 
+      background-color: var(--input-background); 
+      border-left-color: var(--accent-color);
+    }
+    #prompts-list li .prompt-actions {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      gap: 5px;
+    }
+    #prompts-list li:hover .prompt-actions { display: flex; }
+    .prompt-action-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    .prompt-action-btn:hover { background-color: rgba(255,255,255,0.1); color: white; }
     #new-chat-button {
       width: 100%;
       padding: 0.5rem;
@@ -182,7 +269,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background: linear-gradient(135deg, #2c0f4b, #1e0a3c);
+      background: linear-gradient(135deg, var(--input-background), var(--background-color));
       padding: 1rem;
       border-radius: 10px;
       margin: 1rem;
@@ -389,6 +476,40 @@
           <div id="chat-sidebar-header"><span>Chats</span></div>
           <button id="new-chat-button"><i class="fas fa-plus"></i> New Chat</button>
           <ul id="chat-list"></ul>
+          
+          <!-- Prompts Library Section -->
+          <div id="prompts-library-header">
+            <span>Library</span>
+          </div>
+          <button id="add-prompt-button"><i class="fas fa-plus"></i> Add Prompt</button>
+          <ul id="prompts-list"></ul>
+          
+          <!-- Theme Selection Section -->
+          <div id="theme-selector-header">
+            <span>Theme</span>
+          </div>
+          <select id="theme-selector">
+            <option value="default">Default (Purple)</option>
+            <option value="dark">Dark (Classic)</option>
+            <option value="light">Light (Clean)</option>
+            <option value="blue">Blue Ocean</option>
+            <option value="green">Forest</option>
+            <option value="red">Ruby</option>
+            <option value="orange">Sunset</option>
+            <option value="teal">Teal</option>
+            <option value="indigo">Indigo</option>
+            <option value="pink">Pink</option>
+            <option value="cyan">Cyan</option>
+            <option value="amber">Amber</option>
+            <option value="deep-purple">Deep Purple</option>
+            <option value="deep-orange">Deep Orange</option>
+            <option value="lime">Lime</option>
+            <option value="brown">Brown</option>
+            <option value="grey">Grey</option>
+            <option value="blue-grey">Blue Grey</option>
+            <option value="material">Material</option>
+            <option value="neon">Neon</option>
+          </select>
         </div>
       </div>
       <!-- Chat Section -->
@@ -432,6 +553,93 @@
     // Chat management: each chat has an id, name, and messages array.
     let chats = [];
     let currentChat = null;
+    
+    // Prompts library management
+    let prompts = [];
+    
+    // Storage functions
+    function saveChatsToStorage() {
+      try {
+        localStorage.setItem('lm_studio_chats', JSON.stringify(chats));
+      } catch (error) {
+        console.error('Failed to save chats to localStorage:', error);
+      }
+    }
+    
+    function loadChatsFromStorage() {
+      try {
+        const saved = localStorage.getItem('lm_studio_chats');
+        if (saved) {
+          chats = JSON.parse(saved);
+          if (chats.length > 0) {
+            currentChat = chats[0];
+            updateChatList();
+            loadChat(currentChat);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load chats from localStorage:', error);
+      }
+    }
+    
+    function savePromptsToStorage() {
+      try {
+        localStorage.setItem('lm_studio_prompts', JSON.stringify(prompts));
+      } catch (error) {
+        console.error('Failed to save prompts to localStorage:', error);
+      }
+    }
+    
+    function loadPromptsFromStorage() {
+      try {
+        const saved = localStorage.getItem('lm_studio_prompts');
+        if (saved) {
+          prompts = JSON.parse(saved);
+          updatePromptsList();
+        }
+      } catch (error) {
+        console.error('Failed to load prompts from localStorage:', error);
+      }
+    }
+    
+    function saveSettingsToStorage() {
+      try {
+        const settings = {
+          serverUrl: serverUrlInput.value,
+          currentModel: currentModel,
+          isConnected: isConnected,
+          theme: document.getElementById('theme-selector').value
+        };
+        localStorage.setItem('lm_studio_settings', JSON.stringify(settings));
+      } catch (error) {
+        console.error('Failed to save settings to localStorage:', error);
+      }
+    }
+    
+    function loadSettingsFromStorage() {
+      try {
+        const saved = localStorage.getItem('lm_studio_settings');
+        if (saved) {
+          const settings = JSON.parse(saved);
+          if (settings.serverUrl) {
+            serverUrlInput.value = settings.serverUrl;
+          }
+          if (settings.currentModel) {
+            currentModel = settings.currentModel;
+          }
+          if (settings.isConnected) {
+            // Try to reconnect if previously connected
+            connectToServer();
+          }
+          if (settings.theme) {
+            applyTheme(settings.theme);
+            document.getElementById('theme-selector').value = settings.theme;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load settings from localStorage:', error);
+      }
+    }
     
     // Helper: Attach copy code buttons to code blocks
     function attachCopyButtons(container) {
@@ -559,6 +767,373 @@
       });
     }
     
+    // Theme application function
+    function applyTheme(themeName) {
+      const root = document.documentElement;
+      
+      switch(themeName) {
+        case 'default':
+          root.style.setProperty('--background-color', '#1e0a3c');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2c0f4b');
+          root.style.setProperty('--user-message-color', '#6c2d8c');
+          root.style.setProperty('--assistant-message-color', '#442a6f');
+          root.style.setProperty('--button-color', '#8e44ad');
+          root.style.setProperty('--accent-color', '#bb86fc');
+          break;
+        case 'dark':
+          root.style.setProperty('--background-color', '#1a1a1a');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a2a2a');
+          root.style.setProperty('--user-message-color', '#2c3e50');
+          root.style.setProperty('--assistant-message-color', '#34495e');
+          root.style.setProperty('--button-color', '#3498db');
+          root.style.setProperty('--accent-color', '#2980b9');
+          break;
+        case 'light':
+          root.style.setProperty('--background-color', '#ffffff');
+          root.style.setProperty('--text-color', '#333333');
+          root.style.setProperty('--input-background', '#f5f5f5');
+          root.style.setProperty('--user-message-color', '#e0e0e0');
+          root.style.setProperty('--assistant-message-color', '#f0f0f0');
+          root.style.setProperty('--button-color', '#2196f3');
+          root.style.setProperty('--accent-color', '#1976d2');
+          break;
+        case 'blue':
+          root.style.setProperty('--background-color', '#0d1b2a');
+          root.style.setProperty('--text-color', '#e0e1dd');
+          root.style.setProperty('--input-background', '#1b263b');
+          root.style.setProperty('--user-message-color', '#3a506b');
+          root.style.setProperty('--assistant-message-color', '#5bc0be');
+          root.style.setProperty('--button-color', '#0077b6');
+          root.style.setProperty('--accent-color', '#00b4d8');
+          break;
+        case 'green':
+          root.style.setProperty('--background-color', '#1b2632');
+          root.style.setProperty('--text-color', '#f0f0f0');
+          root.style.setProperty('--input-background', '#2d4051');
+          root.style.setProperty('--user-message-color', '#2d6a4f');
+          root.style.setProperty('--assistant-message-color', '#40916c');
+          root.style.setProperty('--button-color', '#2d6a4f');
+          root.style.setProperty('--accent-color', '#40916c');
+          break;
+        case 'red':
+          root.style.setProperty('--background-color', '#1a090b');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a0f14');
+          root.style.setProperty('--user-message-color', '#8b0000');
+          root.style.setProperty('--assistant-message-color', '#b22222');
+          root.style.setProperty('--button-color', '#8b0000');
+          root.style.setProperty('--accent-color', '#ff4500');
+          break;
+        case 'orange':
+          root.style.setProperty('--background-color', '#1a1005');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a1a0a');
+          root.style.setProperty('--user-message-color', '#d35400');
+          root.style.setProperty('--assistant-message-color', '#e67e22');
+          root.style.setProperty('--button-color', '#d35400');
+          root.style.setProperty('--accent-color', '#e67e22');
+          break;
+        case 'teal':
+          root.style.setProperty('--background-color', '#0a1f21');
+          root.style.setProperty('--text-color', '#e8f5e9');
+          root.style.setProperty('--input-background', '#113b40');
+          root.style.setProperty('--user-message-color', '#00695c');
+          root.style.setProperty('--assistant-message-color', '#00897b');
+          root.style.setProperty('--button-color', '#00695c');
+          root.style.setProperty('--accent-color', '#00897b');
+          break;
+        case 'indigo':
+          root.style.setProperty('--background-color', '#1a1a2e');
+          root.style.setProperty('--text-color', '#e94560');
+          root.style.setProperty('--input-background', '#16213e');
+          root.style.setProperty('--user-message-color', '#0f3460');
+          root.style.setProperty('--assistant-message-color', '#533483');
+          root.style.setProperty('--button-color', '#0f3460');
+          root.style.setProperty('--accent-color', '#533483');
+          break;
+        case 'pink':
+          root.style.setProperty('--background-color', '#2c1825');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#3a2033');
+          root.style.setProperty('--user-message-color', '#c39bd3');
+          root.style.setProperty('--assistant-message-color', '#d7bde2');
+          root.style.setProperty('--button-color', '#c39bd3');
+          root.style.setProperty('--accent-color', '#f8c471');
+          break;
+        case 'cyan':
+          root.style.setProperty('--background-color', '#0a1f2a');
+          root.style.setProperty('--text-color', '#e0f7fa');
+          root.style.setProperty('--input-background', '#113b4a');
+          root.style.setProperty('--user-message-color', '#006064');
+          root.style.setProperty('--assistant-message-color', '#00838f');
+          root.style.setProperty('--button-color', '#006064');
+          root.style.setProperty('--accent-color', '#00bcd4');
+          break;
+        case 'amber':
+          root.style.setProperty('--background-color', '#1a1400');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a2000');
+          root.style.setProperty('--user-message-color', '#ff8f00');
+          root.style.setProperty('--assistant-message-color', '#ffb300');
+          root.style.setProperty('--button-color', '#ff8f00');
+          root.style.setProperty('--accent-color', '#ffb300');
+          break;
+        case 'deep-purple':
+          root.style.setProperty('--background-color', '#1a0a2a');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a104a');
+          root.style.setProperty('--user-message-color', '#4a148c');
+          root.style.setProperty('--assistant-message-color', '#7b1fa2');
+          root.style.setProperty('--button-color', '#4a148c');
+          root.style.setProperty('--accent-color', '#7b1fa2');
+          break;
+        case 'deep-orange':
+          root.style.setProperty('--background-color', '#1a0a00');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a1500');
+          root.style.setProperty('--user-message-color', '#bf360c');
+          root.style.setProperty('--assistant-message-color', '#d84315');
+          root.style.setProperty('--button-color', '#bf360c');
+          root.style.setProperty('--accent-color', '#d84315');
+          break;
+        case 'lime':
+          root.style.setProperty('--background-color', '#1a1f0a');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a3a10');
+          root.style.setProperty('--user-message-color', '#827717');
+          root.style.setProperty('--assistant-message-color', '#afb42b');
+          root.style.setProperty('--button-color', '#827717');
+          root.style.setProperty('--accent-color', '#afb42b');
+          break;
+        case 'brown':
+          root.style.setProperty('--background-color', '#1a120a');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a1a10');
+          root.style.setProperty('--user-message-color', '#5d4037');
+          root.style.setProperty('--assistant-message-color', '#795548');
+          root.style.setProperty('--button-color', '#5d4037');
+          root.style.setProperty('--accent-color', '#795548');
+          break;
+        case 'grey':
+          root.style.setProperty('--background-color', '#1a1a1a');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a2a2a');
+          root.style.setProperty('--user-message-color', '#424242');
+          root.style.setProperty('--assistant-message-color', '#616161');
+          root.style.setProperty('--button-color', '#424242');
+          root.style.setProperty('--accent-color', '#616161');
+          break;
+        case 'blue-grey':
+          root.style.setProperty('--background-color', '#1a1f23');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#2a3439');
+          root.style.setProperty('--user-message-color', '#37474f');
+          root.style.setProperty('--assistant-message-color', '#455a64');
+          root.style.setProperty('--button-color', '#37474f');
+          root.style.setProperty('--accent-color', '#455a64');
+          break;
+        case 'material':
+          root.style.setProperty('--background-color', '#263238');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#37474f');
+          root.style.setProperty('--user-message-color', '#1976d2');
+          root.style.setProperty('--assistant-message-color', '#424242');
+          root.style.setProperty('--button-color', '#1976d2');
+          root.style.setProperty('--accent-color', '#2196f3');
+          break;
+        case 'neon':
+          root.style.setProperty('--background-color', '#050505');
+          root.style.setProperty('--text-color', '#ffffff');
+          root.style.setProperty('--input-background', '#111111');
+          root.style.setProperty('--user-message-color', '#ff0055');
+          root.style.setProperty('--assistant-message-color', '#00ffcc');
+          root.style.setProperty('--button-color', '#ff0055');
+          root.style.setProperty('--accent-color', '#00ffcc');
+          break;
+      }
+    }
+    
+    // Initialize the application
+    function init() {
+      loadChatsFromStorage();
+      loadPromptsFromStorage();
+      loadSettingsFromStorage();
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', init);
+    
+    // Theme selector event listener
+    document.getElementById('theme-selector').addEventListener('change', (e) => {
+      applyTheme(e.target.value);
+      saveSettingsToStorage();
+    });
+    
+    // Renders the prompts list in the sidebar.
+    function updatePromptsList() {
+      const promptsList = document.getElementById('prompts-list');
+      promptsList.innerHTML = '';
+      prompts.forEach(prompt => {
+        const li = document.createElement('li');
+        li.textContent = prompt.name;
+        li.title = prompt.content;
+        li.dataset.promptId = prompt.id;
+        
+        // Add click handler to insert prompt into input
+        li.addEventListener('click', () => {
+          userInput.value = prompt.content;
+          userInput.focus();
+        });
+        
+        // Add hover actions (edit/delete)
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'prompt-actions';
+        
+        const editBtn = document.createElement('button');
+        editBtn.className = 'prompt-action-btn';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+        editBtn.title = 'Edit';
+        editBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          editPrompt(prompt.id);
+        });
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'prompt-action-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.title = 'Delete';
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deletePrompt(prompt.id);
+        });
+        
+        actionsDiv.appendChild(editBtn);
+        actionsDiv.appendChild(deleteBtn);
+        li.appendChild(actionsDiv);
+        
+        promptsList.appendChild(li);
+      });
+    }
+    
+    // Adds a new prompt to the library
+    function addPrompt(name, content) {
+      const promptId = Date.now();
+      const newPrompt = { id: promptId, name, content };
+      prompts.push(newPrompt);
+      updatePromptsList();
+      savePromptsToStorage();
+    }
+    
+    // Deletes a prompt from the library
+    function deletePrompt(promptId) {
+      prompts = prompts.filter(p => p.id != promptId);
+      updatePromptsList();
+      savePromptsToStorage();
+    }
+    
+    // Edits a prompt in the library
+    function editPrompt(promptId) {
+      const prompt = prompts.find(p => p.id === promptId);
+      if (!prompt) return;
+      
+      const newName = prompt.name;
+      const newContent = prompt.content;
+      
+      // Create a simple modal for editing
+      const modal = document.createElement('div');
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100%';
+      modal.style.height = '100%';
+      modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+      modal.style.display = 'flex';
+      modal.style.justifyContent = 'center';
+      modal.style.alignItems = 'center';
+      modal.style.zIndex = '1000';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.background = 'var(--background-color)';
+      modalContent.style.padding = '2rem';
+      modalContent.style.borderRadius = '8px';
+      modalContent.style.width = '90%';
+      modalContent.style.maxWidth = '500px';
+      modalContent.style.color = 'var(--text-color)';
+      
+      const title = document.createElement('h3');
+      title.textContent = 'Edit Prompt';
+      title.style.marginTop = '0';
+      
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.value = newName;
+      nameInput.placeholder = 'Prompt name';
+      nameInput.style.width = '100%';
+      nameInput.style.padding = '0.5rem';
+      nameInput.style.marginBottom = '1rem';
+      nameInput.style.borderRadius = '4px';
+      nameInput.style.border = '1px solid #333';
+      nameInput.style.backgroundColor = 'var(--input-background)';
+      nameInput.style.color = 'var(--text-color)';
+      
+      const contentInput = document.createElement('textarea');
+      contentInput.value = newContent;
+      contentInput.placeholder = 'Prompt content';
+      contentInput.style.width = '100%';
+      contentInput.style.height = '150px';
+      contentInput.style.padding = '0.5rem';
+      contentInput.style.marginBottom = '1rem';
+      contentInput.style.borderRadius = '4px';
+      contentInput.style.border = '1px solid #333';
+      contentInput.style.backgroundColor = 'var(--input-background)';
+      contentInput.style.color = 'var(--text-color)';
+      contentInput.style.resize = 'vertical';
+      
+      const buttonsDiv = document.createElement('div');
+      buttonsDiv.style.display = 'flex';
+      buttonsDiv.style.justifyContent = 'space-between';
+      
+      const saveBtn = document.createElement('button');
+      saveBtn.textContent = 'Save';
+      saveBtn.style.padding = '0.5rem 1rem';
+      saveBtn.style.backgroundColor = 'var(--button-color)';
+      saveBtn.style.color = 'var(--text-color)';
+      saveBtn.style.border = 'none';
+      saveBtn.style.borderRadius = '4px';
+      saveBtn.style.cursor = 'pointer';
+      saveBtn.addEventListener('click', () => {
+        prompt.name = nameInput.value || prompt.name;
+        prompt.content = contentInput.value;
+        updatePromptsList();
+        savePromptsToStorage();
+        document.body.removeChild(modal);
+      });
+      
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.padding = '0.5rem 1rem';
+      cancelBtn.style.backgroundColor = '#555';
+      cancelBtn.style.color = 'var(--text-color)';
+      cancelBtn.style.border = 'none';
+      cancelBtn.style.borderRadius = '4px';
+      cancelBtn.style.cursor = 'pointer';
+      cancelBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+      
+      buttonsDiv.appendChild(cancelBtn);
+      buttonsDiv.appendChild(saveBtn);
+      
+      modalContent.appendChild(title);
+      modalContent.appendChild(nameInput);
+      modalContent.appendChild(contentInput);
+      modalContent.appendChild(buttonsDiv);
+      modal.appendChild(modalContent);
+      document.body.appendChild(modal);
+    }
+    
     // Custom context menu for deleting chats.
     function showContextMenu(x, y, chatId) {
       contextMenu.style.left = x + "px";
@@ -628,6 +1203,7 @@
       }
       currentModel = newModel;
       modelSelect.disabled = false;
+      saveSettingsToStorage();
     });
     
     // Connect to server and populate model dropdown.
@@ -662,6 +1238,7 @@
           if (!currentChat) createNewChat();
           // Display connection message without storing it in the chat history
           addMessage('Connected to LM Studio server. You can start chatting now!', false, null, false);
+          saveSettingsToStorage();
         } else {
           throw new Error('No models available');
         }
@@ -685,15 +1262,17 @@
     async function sendMessage() {
       let message = userInput.value.trim();
       if (!message && !pendingImage) return;
-    
+
       if (pendingImage) {
         let promptText = message || "What's in this image?";
         addImageMessage(pendingImage, promptText);
         pendingImage = null;
         imagePreview.style.display = "none";
         userInput.value = "";
+        saveChatsToStorage();
       } else {
         addMessage(message, true);
+        saveChatsToStorage();
       }
     
       const conversationHistory = buildConversationHistory();
@@ -821,6 +1400,15 @@
       };
       reader.readAsDataURL(file);
       imageUpload.value = "";
+    });
+    
+    // Add prompt button click handler
+    document.getElementById('add-prompt-button').addEventListener('click', () => {
+      const name = prompt('Enter prompt name:');
+      if (!name) return;
+      const content = prompt('Enter prompt content:');
+      if (!content) return;
+      addPrompt(name, content);
     });
     
     connectButton.addEventListener('click', () => {
