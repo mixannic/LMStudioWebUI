@@ -1,104 +1,233 @@
-⚠️ This is an **unofficial** project and is **not affiliated with or endorsed by LM Studio**.
+# LM Studio Chat Web Interface
 
-# LM Studio Chat WebUI(unofficial)
+A modern, feature-rich web-based chat interface for LM Studio's local AI model server, built with vanilla JavaScript and designed for seamless local AI interactions.
 
-This is a simple, browser-based chat interface for interacting with your LM Studio server. It allows you to connect to your locally hosted LM Studio model and chat with it from any device with a web browser, including mobile phones.
-This is a personal project - no pull requests are accepted at this time. All Pull Requests will be automatically closed and not accepted. 
+## 🚀 Features
 
-## Features
+### Core Functionality
+- **Real-time Chat**: Stream responses from LM Studio's local AI models
+- **Image Support**: Upload and analyze images with multimodal models
+- **Model Selection**: Choose from available local models
+- **Server Connection**: Connect to LM Studio's local server via WebSocket
 
-- Dark mode interface
-- Connect to any LM Studio server
-- Chat with your LM Studio model
-- LaTeX Math Rendering and Markdown Rendering
-- Mobile-friendly design
-- Super Cool new Purple theme
-- Chats
-- Vision Model Support 
-- Choose your model 
-- Delete Chats 
+### Enhanced User Experience
+- **State Persistence**: Automatic save/load of chats, prompts, and settings via localStorage
+- **Library of Prompts**: Save frequently used prompts for quick access
+- **Click-to-Insert**: One-click insertion of saved prompts into chat
+- **20 Color Themes**: Extensive theme selection for personalized UI experience
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
+### Advanced Features
+- **Markdown Support**: Rich text formatting with code highlighting
+- **LaTeX Math**: Mathematical expressions rendering with MathJax
+- **Copy Code**: One-click copying of code blocks from responses
+- **Chat Management**: Create, rename, and delete conversations
+- **Context Preservation**: Maintains conversation history for coherent responses
 
-## Screenshots 📸
-![image](https://github.com/user-attachments/assets/7944a30a-6e52-467b-bf27-309f8db0bfde)
-![image](https://github.com/user-attachments/assets/cecc2e50-1583-4ce6-a092-10adcb2359f3)
-![image](https://github.com/user-attachments/assets/717bb8c6-ff62-4574-95e4-146909302180)
-![image](https://github.com/user-attachments/assets/22275a46-f332-4ab9-b727-678a98aef7af)
-![image](https://github.com/user-attachments/assets/d7cba468-166b-4d74-a98a-37ca72093b83)
+## 🎨 Available Themes
 
+Choose from 20 carefully designed color schemes:
 
+**Classic Themes:**
+- Default (Purple) - Original purple theme
+- Dark (Classic) - Professional dark theme
+- Light (Clean) - Bright, clean interface
 
+**Colorful Themes:**
+- Blue Ocean - Deep blue gradient
+- Forest - Green nature-inspired
+- Ruby - Rich red accents
+- Sunset - Warm orange tones
+- Teal - Cyan/blue combination
+- Indigo - Deep indigo theme
+- Pink - Purple/pink combination
+- Cyan - Bright cyan accents
+- Amber - Golden yellow theme
 
-## Setup Instructions
+**Material Design:**
+- Deep Purple - Dark purple material
+- Deep Orange - Dark orange material
+- Lime - Bright green material
+- Brown - Earthy brown tones
+- Grey - Monochrome grey
+- Blue Grey - Blue-grey combination
+- Material - Standard material design
 
-### For Desktop Users
+**Special Themes:**
+- Neon - Cyberpunk neon colors
 
-1. Download the `index.html` file from this repository.
-2. Save it to a location on your computer that you can easily access.
+## 🛠️ Technical Specifications
 
-### For Mobile Users
-This works out of the box on Android devices. For iOS you need to open the file in Microsoft Edge or another browser. Safari/Chrome do not work. 
-There are several ways to get the `index.html` file on your mobile device:
+### Built With
+- **Vanilla JavaScript** - No frameworks, lightweight and fast
+- **CSS Grid/Flexbox** - Modern responsive layouts
+- **Fetch API** - Modern HTTP requests with streaming support
+- **LocalStorage API** - Client-side data persistence
+- **File API** - Image upload and preview functionality
 
-1. **Direct Download**: 
-   - Open this repository on your mobile device's web browser.
-   - Find the `index.html` file and download it directly to your device.
+### Dependencies
+- **Marked.js** - Markdown rendering
+- **Highlight.js** - Code syntax highlighting
+- **MathJax** - LaTeX mathematical expressions
+- **Font Awesome** - Icon library
+- **Google Fonts** - Inter font family
 
-2. **Email to Yourself**:
-   - Download the `index.html` file on your computer.
-   - Email it to yourself as an attachment.
-   - Open the email on your mobile device and download the attachment.
+### Browser Support
+- Modern browsers with ES6+ support
+- Chrome, Firefox, Safari, Edge
+- Mobile browsers supported
 
-3. **Cloud Storage**:
-   - Upload the `index.html` file to a cloud storage service like Google Drive, Dropbox, or iCloud.
-   - Access the file from your mobile device using the respective cloud storage app.
+## 📦 Installation
 
-4. **File Transfer Apps**:
-   - Use apps like AirDrop (for iOS devices) or nearby sharing (for Android devices) to transfer the file from your computer to your mobile device.
+### Quick Start
+1. Download the `index.html` file
+2. Open it in any modern web browser
+3. Connect to your LM Studio server
 
-## Usage Instructions
+### Server Requirements
+- LM Studio running locally
+- Server API enabled
+- Models loaded and available
 
-1. **Start LM Studio Server**:
-   - Open LM Studio on your computer.
-   - Go to the "Server" tab (In 0.3.x -> Developer -> Local Server).
-   - Ensure that CORS is enabled and Serve on Local Network is enabled.
-   - Click "Start Server" and note down the server address.
+## 🔧 Configuration
 
-2. **Open the Chat Interface**:
-   - On desktop: Double-click the `index.html` file to open it in your default web browser.
-   - On mobile: Use a file manager app to locate the downloaded `index.html` file and open it with your web browser.
+### Server Connection
+1. Enter your LM Studio server address in the header
+2. Click "Connect" to establish connection
+3. Select your preferred model from the dropdown
 
-3. **Connect to LM Studio Server**:
-   - In the chat interface, enter the LM Studio server address in the input field at the top. 
-   - Click the "Connect" button.
+### Theme Customization
+1. Use the theme selector in the sidebar
+2. Choose from 20 available themes
+3. Theme automatically saves and loads on subsequent visits
 
-4. **Start Chatting**:
-   - Once connected, you can start typing messages in the input field at the bottom of the screen.
-   - Press Enter or tap Send to send your message.
-   - The model's responses will appear in the chat window.
+### Prompt Library
+1. Click "Add Prompt" to save frequently used prompts
+2. Click any saved prompt to insert into chat
+3. Edit or delete prompts using hover actions
 
-## Troubleshooting
+## 📱 Usage
 
-- **Can't connect to server**: 
-  - Ensure LM Studio Server is running on your computer.
-  - Check that you're using the correct server address.
-  - If accessing from another device, make sure both devices are on the same network.
+### Starting a Conversation
+1. Ensure LM Studio server is running
+2. Connect to the server via the interface
+3. Select your desired model
+4. Start typing your message
 
-- **Slow responses**: 
-  - LM Studio processing speed depends on your computer's capabilities. Larger models may take longer to respond.
+### Image Analysis
+1. Click the image upload button
+2. Select an image file
+3. Type your question about the image
+4. Receive AI analysis of the visual content
 
-- **Interface not loading**: 
-  - Try opening the `index.html` file with a different web browser.
+### Managing Chats
+1. Create new chats via the "New Chat" button
+2. Switch between chats using the sidebar
+3. Right-click chats to delete (context menu)
+4. Chat history automatically saves
 
-## Security Note
+### Using the Prompt Library
+1. Add prompts via the "Add Prompt" button
+2. Browse saved prompts in the library section
+3. Click any prompt to insert into the input field
+4. Edit prompts using the edit button
 
-This interface is designed for local use only. Do not expose your LM Studio server to the public internet without proper security measures in place.
+## 🎯 Key Features Deep Dive
 
-## Feedback and Contributions
+### State Persistence
+The interface automatically saves:
+- **Chat conversations** with full message history
+- **Prompt library** with all saved prompts
+- **Server settings** including URL and selected model
+- **Theme preferences** for consistent experience
+- **Connection status** for quick reconnection
 
-This is a personal project. While the code is public for anyone to use and learn from, I am **not accepting pull requests** for new features or bug fixes. If you find an issue or have a suggestion, please open an issue to discuss it.
-Pull Requests are automatically closed and not welcome. 
+### Theme System
+- **CSS-in-JS Implementation**: Dynamic theme switching without page reload
+- **20 Pre-designed Themes**: Each with carefully selected color palettes
+- **Smooth Transitions**: CSS transitions for pleasant theme changes
+- **Accessibility Focused**: All themes maintain good contrast ratios
+- **Complete Coverage**: Every UI element respects theme colors
 
-## Star History
+### Image Processing
+- **Client-side Processing**: Images processed locally for privacy
+- **Base64 Encoding**: Efficient image data handling
+- **Preview Functionality**: Visual confirmation before sending
+- **Multimodal Support**: Works with vision-capable models
 
-[![Star History Chart](https://api.star-history.com/svg?repos=YorkieDev/LMStudioWebUI&type=Date)](https://star-history.com/#YorkieDev/LMStudioWebUI&Date)
+### Code and Math Support
+- **Syntax Highlighting**: Automatic code block highlighting
+- **Copy Functionality**: One-click copying of code examples
+- **Mathematical Expressions**: LaTeX rendering for complex equations
+- **Markdown Rendering**: Rich text formatting support
+
+## 🔍 Architecture
+
+### File Structure
+```
+index.html          # Complete standalone application
+├── HTML Structure  # Semantic markup with ARIA labels
+├── CSS Styles      # Modern CSS with custom properties
+└── JavaScript      # Vanilla JS with modular functions
+```
+
+### Code Organization
+- **Global Variables**: Centralized state management
+- **Storage Functions**: localStorage interaction utilities
+- **UI Functions**: DOM manipulation and rendering
+- **Event Handlers**: User interaction management
+- **API Functions**: Server communication logic
+
+### Design Patterns
+- **Modular Functions**: Clean, single-responsibility functions
+- **Event-Driven**: Responsive user interactions
+- **Progressive Enhancement**: Works without JavaScript (basic HTML)
+- **Accessibility**: Semantic HTML and keyboard navigation
+
+## 🤝 Contributing
+
+### Development Setup
+1. Fork the repository
+2. Make your changes
+3. Test thoroughly across browsers
+4. Submit a pull request
+
+### Code Style
+- Use semantic HTML
+- Follow CSS naming conventions
+- Maintain JavaScript readability
+- Ensure cross-browser compatibility
+
+### Feature Requests
+Submit issues with:
+- Clear feature description
+- Use case explanation
+- Mockups if applicable
+- Priority indication
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- **LM Studio** for the excellent local AI server
+- **Marked.js** team for markdown parsing
+- **Highlight.js** team for syntax highlighting
+- **MathJax** team for mathematical rendering
+- **Font Awesome** for iconography
+
+## 🔄 Changelog
+
+### Version 1.0.0
+- Initial release with core chat functionality
+- State persistence implementation
+- 20 theme color system
+- Prompt library with CRUD operations
+- Image upload and analysis support
+- Responsive design improvements
+- Accessibility enhancements
+
+---
+
+**Note**: This is a standalone HTML application that requires no build process or server setup. Simply download and open in any modern browser to use with your LM Studio server.
